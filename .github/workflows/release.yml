@@ -68,6 +68,14 @@ jobs:
         with:
           python-version: "3.13"
 
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('scripts/requirements-bw.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
       - name: Build austin in container
         run: |
           docker run --rm \
@@ -136,6 +144,14 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.13"
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('scripts/requirements-bw.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
 
       - name: Setup libunwind
         uses: ./.github/actions/setup-libunwind
@@ -240,6 +256,14 @@ jobs:
         with:
           python-version: "3.13"
 
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('scripts/requirements-bw.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
       - name: Build austin in container
         run: |
           docker run --rm \
@@ -302,8 +326,8 @@ jobs:
       - name: Generate artifacts
         shell: bash
         run: |
-          echo "C:\Program Files (x86)\WiX Toolset v3.11\bin" >> $GITHUB_PATH
-          export PATH="/c/Program Files (x86)/`ls /c/Program\ Files\ \(x86\) | grep \"[wW]i[xX] [tT]oolset\"`/bin:$PATH"
+          echo "C:\\Program Files (x86)\\WiX Toolset v3.11\\bin" >> $GITHUB_PATH
+          export PATH="/c/Program Files (x86)/`ls /c/Program\\ Files\\ \(x86\) | grep \"[wW]i[xX] [tT]oolset\"`/bin:$PATH"
           export VERSION=$(cat src/austin.h | sed -r -n "s/^#define VERSION[ ]+\"(.+)\"/\1/p")
 
           gcc -static -s -Wall -O3 -Os -o src/austin src/*.c -lpsapi -lntdll -ldbghelp
@@ -338,7 +362,7 @@ jobs:
 
           pushd choco
           sed -i "s/%WIN_MSI_HASH%/$WIN_MSI_HASH/g" tools/chocolateyinstall.ps1
-          /bin/find . -type f -exec sed -i "s/%VERSION%/$VERSION/g" {} \; ;
+          /bin/find . -type f -exec sed -i "s/%VERSION%/$VERSION/g" {} \\; ;
           choco apikey --key ${{ secrets.CHOCO_APIKEY }} --source https://push.chocolatey.org/
           choco pack
           choco push --source https://push.chocolatey.org/
@@ -358,6 +382,14 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.13"
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('scripts/requirements-bw.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
 
       - name: Build Python wheels
         shell: bash
@@ -397,6 +429,14 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.13"
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('scripts/requirements-bw.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
 
       - name: Generate artifacts
         run: |
